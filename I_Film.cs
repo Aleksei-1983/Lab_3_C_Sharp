@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 namespace _3_laba
 {
     // Перечисление жанров (как в оригинале)
-    internal enum FilmGenre
+    public enum FilmGenre
     {
         Action,
         Comedy,
@@ -17,7 +17,8 @@ namespace _3_laba
         Thriller,
         Unknown
     }
-    internal interface I_Film
+    
+    interface I_Film
     {
         // Свойства названия жанра
         public FilmGenre Genre { get; set;  }

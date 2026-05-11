@@ -8,7 +8,7 @@ using System.Xml.Serialization;
 namespace _3_laba // Объявляет пространство имен _3_laba
 {
     [Serializable]
-    internal class Series : Film // Объявляет внутренний класс Series, наследующий от класса Film
+    public class Series : Film // Объявляет внутренний класс Series, наследующий от класса Film
     {
         private int _serial_number; // Приватное поле для хранения номера серии
         private int _season_number; // Приватное поле для хранения номера сезона

@@ -8,7 +8,7 @@ using System.Xml.Serialization;
 namespace _3_laba // Объявляет пространство имен _3_laba для организации кода
 {
     [Serializable]
-    internal class Widescreen_Film : Film // Объявляет внутренний класс Widescreen_Film, который наследуется от базового класса Film
+    public class Widescreen_Film : Film // Объявляет внутренний класс Widescreen_Film, который наследуется от базового класса Film
     {
         private int _moneyCollected; // Приватное поле класса для хранения суммы кассовых сборов (в условных единицах)
    

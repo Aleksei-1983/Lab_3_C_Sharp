@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using System.Xml.Serialization;
 
 namespace _3_laba
 {
@@ -323,6 +324,49 @@ namespace _3_laba
                 Index++; // Увеличиваем индекс для следующего элемента
             }
             return -1; // Если ничего не найдено, возвращаем -1
+        }
+
+
+
+        // Метод сериализации (сохранения) коллекции фильмов в XML-файл
+        // ------------------------------------------------------------------------------------------------
+        public void Serialize_Collection_Films()
+        {
+            string xmlFilePath = "save_Films.xml"; // Задаёт имя файла для сохранения данных
+
+            // Проводим сериализацию коллекции в файл в формате XML
+            SerializeToXml(arr_films, xmlFilePath); // Вызывает статический метод для записи списка arr_films в XML-файл
+        }
+
+        //• Метод десериализации (загрузки) коллекции фильмов из XML-файла
+        public void DeSerialize_Collection_Films()
+        {
+            string xmlFilePath = "save_Films.xml"; // Имя файла, откуда будут загружаться данные
+
+            // Проводим сериализацию коллекции в файл в формате XML (в комментарии опечатка: имеется в виду десериализация)
+            arr_films = DeserializeFromXml(xmlFilePath); // Загружает список фильмов из XML-файла и присваивает его полю arr_films
+        }
+
+        //• Статический метод для записи списка фильмов в XML-файл
+        public static void SerializeToXml(List<Film> birds, string filePath)
+        {
+            XmlSerializer serializer = new XmlSerializer(typeof(List<Film>)); // Создаёт объект XmlSerializer для работы со списком фильмов
+
+            using (FileStream fs = new FileStream(filePath, FileMode.Create)) // Открывает файловый поток для записи (создаёт или перезаписывает файл)
+            {
+                serializer.Serialize(fs, birds); // Выполняет сериализацию: записывает список birds в поток fs в формате XML
+            } // Блок using автоматически закрывает и освобождает файловый поток
+        }
+
+        //• Статический метод для чтения списка фильмов из XML-файла
+        public static List<Film> DeserializeFromXml(string filePath)
+        {
+            XmlSerializer serializer = new XmlSerializer(typeof(List<Film>)); // Создаёт сериализатор для работы со списком фильмов
+
+            using (FileStream fs = new FileStream(filePath, FileMode.Open)) // Открывает файловый поток для чтения (файл должен существовать)
+            {
+                return (List<Film>)serializer.Deserialize(fs); // Десериализует данные из потока в объект типа List<Film> и возвращает его
+            } // Блок using автоматически закрывает поток
         }
 
     }

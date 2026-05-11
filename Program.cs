@@ -34,6 +34,14 @@ namespace _3_laba
 
             //int Index = collection_Birds.Find_film("Мальчишник в Вегасе");
             //Console.WriteLine(Index);
+            Console.WriteLine("--------------Serialize_Collection_Films---------------------");
+            collection_Birds.Serialize_Collection_Films();
+            collection_Birds.Clearing_Collection();
+            collection_Birds.Print_Arr_Films();
+            Console.WriteLine("--------------DeSerialize_Collection_Films--------------------");
+            collection_Birds.DeSerialize_Collection_Films();
+            collection_Birds.Print_Arr_Films();
+            Console.WriteLine("--------------------------------------------------------------");
 
 
 

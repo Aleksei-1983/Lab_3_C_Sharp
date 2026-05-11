@@ -3,55 +3,58 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml.Serialization;
 
-namespace _3_laba
+namespace _3_laba // Объявляет пространство имен _3_laba
 {
-    internal class Series : Film
+    [Serializable]
+    internal class Series : Film // Объявляет внутренний класс Series, наследующий от класса Film
     {
-        private int _series;
-        private int _season;
+        private int _serial_number; // Приватное поле для хранения номера серии
+        private int _season_number; // Приватное поле для хранения номера сезона
 
-        public int _Series
+        public int Series_number // Свойство для доступа к полю _series
         {
-            get { return _series; }
-            set { _series = value; }
+            get { return _serial_number; } // Геттер возвращает значение поля _series
+            set { _serial_number = value; } // Сеттер присваивает полю _series переданное значение
         }
 
-        public int Season
+        public int Season_number // Свойство для доступа к полю _season
         {
-            get { return _season; }
-            set { _season = value; }
+            get { return _season_number; } // Геттер возвращает значение поля _season
+            set { _season_number = value; } // Сеттер присваивает полю _season переданное значение
         }
 
         // Конструкторы
-        public Series()
+        public Series() // Конструктор без параметров (по умолчанию)
         {
-            _series = 0;
-            _season = 0;
+            _serial_number = 0; // Инициализирует _series нулем
+            _season_number = 0; // Инициализирует _season нулем
 
         }
-
+        // Конструктор с параметрами: жанр, название, год, серия, сезон; вызывает базовый конструктор Film
         public Series(FilmGenre genre, string title, int year, int series, int season) : base(genre, title, year)
         {
-            _series = series;
-            _season = season;
+            _serial_number = series; // Присваивает полю _series значение параметра series
+            _season_number = season; // Присваивает полю _season значение параметра season
 
         }
-
-        public Series(FilmGenre genre, string title, int year, int series, int season, string[] actors) : base(genre, title, year, actors)
+        // Конструктор с дополнительным массивом актеров; вызывает базовый конструктор Film
+        public Series(FilmGenre genre, string title, int year, int series, int season, string[] actors) : base(genre, title, year, actors) 
         {
-            _series = series;
-            _season = season;
+            _serial_number = series; // Присваивает полю _series значение параметра series
+            _season_number = season; // Присваивает полю _season значение параметра season
 
         }
 
         // Методы
 
         // возвощает строку с данными
-        public override string ToString()
+        // Переопределяет виртуальный метод ToString для получения строкового представления объекта
+        public override string ToString() 
         {
-            string str = $"Сезон: {_season} Серия: {_series}\n";
-            return base.ToString() + str;
+            string str = $"Сезон: {Season_number} Серия: {Series_number}\n"; // Создает строку с информацией о сезоне и серии
+            return base.ToString() + str; // Возвращает строку от базового класса ToString, объединенную с дополнительной информацией
         }
     }
 }

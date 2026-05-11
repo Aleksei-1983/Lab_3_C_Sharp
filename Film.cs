@@ -1,188 +1,181 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml.Serialization;
 
-namespace _3_laba
+namespace _3_laba // Объявляет пространство имен с именем "_3_laba"
 {
+    [Serializable]
+    [XmlInclude(typeof(Series))]
+    [XmlInclude(typeof(Widescreen_Film))]
 
     // Класс описывает информацию о фильме, содержит поля, свойства, конструкторы и методы
-    internal class Film : I_Film
-    {
-        // поле перичесление количество созданных объектов
-        private static int _counter = 0;
+    internal class Film : I_Film // Объявление внутреннего класса Film, реализующего интерфейс I_Film
+    { // Открывающая скобка тела класса Film
+        // поле перечисление количество созданных объектов
+        private static int _counter = 0; // Статическое поле-счетчик, хранящее количество созданных экземпляров класса (инициализируется 0)
 
         // Для хранения данных о фильме используются поля: _title - название, _year - год выпуска, _actors - список актеров
         // Статический массив с названиями жанров (общий для всех объектов)
-        private static readonly string[] _genres_str = { "экшн", "комедия", "драма", "хоррор", "романтика", "триллер", "не задано" };
-        private FilmGenre _genre;
-        private string _title;
-        private int _year;
-        private string[] _actors;
-        private int _numberActor;
+        private static readonly string[] _genres_str = { "экшн", "комедия", "драма", "хоррор", "романтика", "триллер", "не задано" }; // Статический массив строк с именами жанров (порядок соответствует перечислению FilmGenre)
+        private FilmGenre _genre; // Приватное поле для хранения жанра фильма (тип - перечисление FilmGenre)
+        private string _title; // Приватное поле для хранения названия фильма
+        private int _year; // Приватное поле для хранения года выпуска фильма
+        private string[] _actors; // Приватное поле - массив строк для хранения имен актеров
+        private int _numberActor; // Приватное поле для хранения фактического количества актеров в массиве
 
         // Свойства
         // С помощью свойств можно получать доступ к приватным полям и изменять их значения
-        public FilmGenre Genre
+        public FilmGenre Genre // Свойство для доступа к полю _genre
         {
-            get => _genre;
-            set
+            get => _genre; // Геттер возвращает текущее значение поля _genre
+            set // Сеттер для установки значения жанра
             {
-                if ((value & (FilmGenre.Action | FilmGenre.Comedy | FilmGenre.Romance |
-                              FilmGenre.Thriller | FilmGenre.Horror | FilmGenre.Drama)) != 0)
+                if ((value & (FilmGenre.Action | FilmGenre.Comedy | FilmGenre.Romance | // Проверяем, содержит ли переданное значение допустимые флаги (побитовое И)
+                              FilmGenre.Thriller | FilmGenre.Horror | FilmGenre.Drama)) != 0) // Продолжение условия: если результат не равен 0, значит хотя бы один допустимый жанр присутствует
                 {
-                    _genre = value;
+                    _genre = value; // Устанавливаем поле _genre в переданное значение (допустимая комбинация флагов)
                 }
-                else
+                else // Иначе (если значение не содержит ни одного допустимого жанра)
                 {
-                    _genre = FilmGenre.Unknown;
+                    _genre = FilmGenre.Unknown; // Устанавливаем жанр в Unknown (не задано)
                 }
             }
         }
 
-        public string Title
+        public string Title // Свойство для доступа к полю _title
         {
-            get { return _title; }
-            set { _title = value; }
+            get { return _title; } // Геттер возвращает значение поля _title
+            set { _title = value; } // Сеттер присваивает полю _title переданное значение
         }
 
-        public int Year
+        public int Year // Свойство для доступа к полю _year
         {
-            get { return _year; }
-            set { _year = value; }
+            get { return _year; } // Геттер возвращает год выпуска
+            set { _year = value; } // Сеттер устанавливает год выпуска
         }
 
-        public string[] Actors
-        {
-            get { return _actors; }
-            set { _actors = value; }
+        public string[] Actors // Свойство для доступа к полю _actors (массиву актеров)
+        { 
+            get { return _actors; } // Геттер возвращает массив актеров
+            set { _actors = value; } // Сеттер присваивает полю _actors новый массив
         }
 
         // Индексатор
         // Индексатор позволяет получать или изменять элементы массива _actors по индексу
-        public string this[int index]
+        public string this[int index] // Объявление индексатора с параметром index (тип int)
         {
-            get
+            get // Геттер индексатора
             {
-                if (index >= 0 && index < _actors.Length)
+                if (index >= 0 && index < _actors.Length) // Проверяем, что индекс находится в допустимых границах массива _actors
                 {
-                    return _actors[index];
+                    return _actors[index]; // Возвращаем элемент массива по указанному индексу
                 }
-                else
+                else // Если индекс вне диапазона
                 {
-                    return null;
+                    return null; // Возвращаем null (значение отсутствует)
                 }
             }
-
-            set
+            set // Сеттер индексатора
             {
-                if (index >= 0 && index < _actors.Length)
-                {
-                    _actors[_numberActor++] = value;
+                if (index >= 0 && index < _actors.Length) // Проверяем корректность индекса
+                { // Открывающая скобка if
+                    _actors[_numberActor++] = value; // Присваиваем переданное значение элементу массива по индексу _numberActor и затем увеличиваем счетчик актеров
                 }
             }
-
         }
 
         // Конструкторы
-        public Film()
+        public Film() // Конструктор без параметров (по умолчанию)
         {
-            _genre = FilmGenre.Unknown;
-            _title = "";
-            _year = 0;
-            _actors = new string[10];
-            _numberActor = 0;
-            IncreaseCounter();
+            _genre = FilmGenre.Unknown; // Устанавливаем жанр как Unknown
+            _title = ""; // Устанавливаем пустое название
+            _year = 0; // Устанавливаем год 0
+            _actors = new string[10]; // Создаем новый массив строк размером 10 для актеров
+            _numberActor = 0; // Инициализируем счетчик актеров нулем
+            IncreaseCounter(); // Вызываем статический метод для увеличения счетчика созданных экземпляров
         }
 
-        public Film(FilmGenre genre, string title, int year)
+        public Film(FilmGenre genre, string title, int year) // Конструктор с параметрами жанр, название, год
         {
-            _genre = genre;
-            _title = title;
-            _year = year;
-            _actors = new string[10];
-            _numberActor = 0;
-            IncreaseCounter();
+            _genre = genre; // Присваиваем переданный жанр
+            _title = title; // Присваиваем переданное название
+            _year = year; // Присваиваем переданный год
+            _actors = new string[10]; // Создаем массив для актеров размером 10
+            _numberActor = 0; // Счетчик актеров = 0 (массив пуст)
+            IncreaseCounter(); // Увеличиваем счетчик экземпляров
         }
 
-        public Film(FilmGenre genre, string title, int year, string[] actors)
+        public Film(FilmGenre genre, string title, int year, string[] actors) // Конструктор с параметрами жанр, название, год, массив актеров
         {
-            _genre = genre;
-            _title = title;
-            _year = year;
-            _numberActor = actors.Length;
-            _actors = actors;
-            IncreaseCounter();
-        }
-
-        ~Film()
-        {
-
+            _genre = genre; // Устанавливаем жанр
+            _title = title; // Устанавливаем название
+            _year = year; // Устанавливаем год
+            _numberActor = actors.Length; // Устанавливаем количество актеров равным длине переданного массива
+            _actors = actors; // Присваиваем переданный массив актеров полю _actors
+            IncreaseCounter(); // Увеличиваем счетчик созданных объектов
         }
 
         // Методы
         // Для добавления нового актера в список актеров используется метод AddActor
-        public void AddActor(string actor)
+        public void AddActor(string actor) // Публичный метод добавления нового актера в массив
         {
-            string[] newActors = new string[_actors.Length + 1];
-            _actors.CopyTo(newActors, 0);
-            newActors[newActors.Length - 1] = actor;
-            _actors = newActors;
+            string[] newActors = new string[_actors.Length + 1]; // Создаем новый массив длиной на 1 больше текущего
+            _actors.CopyTo(newActors, 0); // Копируем все существующие элементы из старого массива в новый (начиная с индекса 0)
+            newActors[newActors.Length - 1] = actor; // В последний элемент нового массива записываем переданного актера
+            _actors = newActors; // Заменяем старый массив новым (увеличенным)
         }
 
-        // возвощает строку с данными
-        public override string ToString()
+        // возвращает строку с данными
+        public override string ToString() // Переопределение метода ToString для получения строкового представления объекта Film
         {
-            string s = $"Жанр: {GetGenreString(_genre)}.\nНазвание фильма: {_title}.\n" +
-                $"Год выпуска: {_year}.\n";
-            StringBuilder stringBuilder = new StringBuilder(s, 1024);
-            stringBuilder.Append("Актеры: ");
+            string s = $"Жанр: {GetGenreString(_genre)}.\nНазвание фильма: {_title}.\n" + // Формируем строку с жанром, названием
+                $"Год выпуска: {_year}.\n"; // Добавляем год выпуска
+            StringBuilder stringBuilder = new StringBuilder(s, 1024); // Создаем StringBuilder с начальной строкой s и емкостью 1024 символа
+            stringBuilder.Append("Актеры: "); // Добавляем заголовок "Актеры: "
 
-            if (_numberActor > 0)
+            if (_numberActor > 0) // Если есть хотя бы один актер
             {
-                for (int i = 0; i < _numberActor && (_actors[i] != null) && (_actors[i] != ""); i++)
+                for (int i = 0; i < _numberActor && (_actors[i] != null) && (_actors[i] != ""); i++) // Цикл по индексам актеров до фактического количества, проверяя, что элемент не null и не пустая строка
                 {
-                    stringBuilder.Append(_actors[i]).Append(", ");
+                    stringBuilder.Append(_actors[i]).Append(", "); // Добавляем имя актера и запятую с пробелом
                 }
-                stringBuilder.Append("\n");
+                stringBuilder.Append("\n"); // После перебора всех актеров добавляем символ новой строки
             }
 
-            return stringBuilder.ToString();
+            return stringBuilder.ToString(); // Возвращаем результирующую строку из StringBuilder
         }
 
-        public virtual void Print_One_Film()
+        public virtual void Print_One_Film() // Виртуальный метод для вывода информации об одном фильме в консоль
         {
-            Console.WriteLine(this?.ToString());
-        }
+            Console.WriteLine(this?.ToString()); // Вызываем ToString() текущего объекта (с проверкой на null) и выводим в консоль
+        } 
 
         // Статические поля и методы
         // Класс также содержит статические поля и методы,
         // в данном случае count - количество созданных объектов класса Film и
         // метод IncreaseCount для увеличения счетчика.
-        public static int Count
+        public static int Count // Статическое свойство только для чтения, возвращающее количество созданных экземпляров
         {
-            get { return _counter; }
+            get { return _counter; } // Геттер возвращает значение статического поля _counter
         }
 
-        public static void IncreaseCounter()
+        public static void IncreaseCounter() // Статический метод для увеличения счетчика _counter на 1
         {
-            _counter++;
+            _counter++; // Инкрементируем статическое поле _counter
         }
 
-        public static void DecreaseCounter()
+        public static void DecreaseCounter() // Статический метод для уменьшения счетчика _counter на 1
         {
-            _counter--;
+            _counter--; // Декрементируем статическое поле _counter
         }
 
         // Статический метод, который принимает FilmGenre и возвращает строку
-        public static string GetGenreString(FilmGenre genre)
+        public static string GetGenreString(FilmGenre genre) // Статический метод для получения строкового названия жанра по значению перечисления
         {
-            return _genres_str[(int)genre];
-        }
+            return _genres_str[(int)genre]; // Возвращаем строку из массива _genres_str по индексу, равному числовому значению перечисления genre
+        } 
     }
 }
-
-
-

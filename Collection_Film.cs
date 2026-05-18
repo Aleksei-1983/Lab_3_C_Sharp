@@ -335,7 +335,7 @@ namespace _3_laba
             string xmlFilePath = "save_Films.xml"; // Задаёт имя файла для сохранения данных
 
             // Проводим сериализацию коллекции в файл в формате XML
-            SerializeToXml(arr_films, xmlFilePath); // Вызывает статический метод для записи списка arr_films в XML-файл
+            SerializeToXml(arr_films, xmlFilePath); // Вызываем метод для записи списка arr_films в XML-файл
         }
 
         //• Метод десериализации (загрузки) коллекции фильмов из XML-файла
